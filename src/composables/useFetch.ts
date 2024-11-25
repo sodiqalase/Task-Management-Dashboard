@@ -1,11 +1,16 @@
-import { useQuery, useQueryClient, UseQueryOptions } from "@tanstack/vue-query";
-import { computed, Ref } from "vue";
+import {
+    useQuery,
+    useQueryClient,
+    UseQueryOptions,
+    queryOptions,
+} from "@tanstack/vue-query";
+import { computed, Ref, unref } from "vue";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import ApiClient from "../services/axios_config";
 
 interface IFetchProps<T>
     extends Omit<UseQueryOptions<T>, "queryKey" | "queryFn"> {
-    url: string;
+    url: string | Ref<string>;
     key: string;
     params?: Ref<Record<string, string | number | null | undefined | boolean>>;
     onSuccess?: (
@@ -21,14 +26,17 @@ function useFetch<TData>({
     params,
     onSuccess = undefined,
     axiosOptions = {},
-    ...queryOptions
+    ...queryOpts
 }: IFetchProps<TData>) {
     const queryClient = useQueryClient();
 
-    const queryKey = computed(() => [key, { url, ...(params?.value ?? {}) }]);
+    const queryKey = computed(() => [
+        key,
+        { url: unref(url), ...(params?.value ?? {}) },
+    ]);
 
     const queryFn = async () => {
-        const response: AxiosResponse<TData> = await ApiClient.get(url, {
+        const response: AxiosResponse<TData> = await ApiClient.get(unref(url), {
             data: {},
             params: Object.keys(params?.value ?? {})
                 .filter(
@@ -54,11 +62,11 @@ function useFetch<TData>({
         return extractedResponse;
     };
 
-    const queryOptionsWithDefaults = {
-        queryKey: queryKey.value,
+    const queryOptionsWithDefaults = queryOptions({
+        queryKey,
         queryFn,
-        ...queryOptions,
-    };
+        ...queryOpts,
+    });
 
     return useQuery(queryOptionsWithDefaults);
 }

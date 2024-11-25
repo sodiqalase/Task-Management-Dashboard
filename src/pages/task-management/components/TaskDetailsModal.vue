@@ -13,7 +13,7 @@ interface Props {
 
 const { onClose,data } = defineProps<Props>();
 
-const {title, description,dueDate,status='Pending',priority='Low'}=data||{}
+const {title, description,due_date,status='Pending',priority='Low'}=data||{}
 </script>
 
 <template>
@@ -29,7 +29,7 @@ const {title, description,dueDate,status='Pending',priority='Low'}=data||{}
                 <div>
                     <h6 className="text-dbGray text-sm">Due Date</h6>
                     <p className="text-blueGray font-medium font-medium break-words mt-1">
-                       {{dueDate?formatDate(dueDate):"N/A"}}
+                       {{due_date?formatDate(due_date):"N/A"}}
                     </p>
                 </div>
                 <div>

@@ -11,35 +11,43 @@ import ConfirmationModal from "../../components/modal/ConfirmationModal.vue";
 import AddTaskModal from "./components/AddTaskModal.vue";
 import TaskFilters from "./components/TaskFilters.vue";
 import { TaskService } from "../../services/task.service";
-import { useRoute } from "vue-router";
+
+import { useUrlState } from "../../composables/useURLQuery";
 
 const headers = ["Title", "Description", "Status", "Priority", "DueDate"];
-const route = useRoute()
 
-const fetchParams = computed(() => { 
-   return {
-  page: route.query.page??"1",
-  limit: 10, 
-}
- });
+const page = useUrlState("page", "1", (x) => Number(x));
+const status = useUrlState("status", "");
+const priority = useUrlState("priority", "");
+const sortBy = useUrlState("sortBy", "");
+
+const fetchParams = computed(() => ({
+    page: page.value,
+    status: status.value,
+    priority: priority.value,
+    sortBy: sortBy.value,
+    limit: 10,
+}));
 
 const details = ref<ITask | null>(null);
-const deleteId = ref<number | null>(null);
-const addEditTask = ref<{isOpen:boolean; data:ITask | null}>({isOpen:false,data:null});
+const deleteId = ref<string | null>(null);
+const addEditTask = ref<{ isOpen: boolean; data: ITask | null }>({
+    isOpen: false,
+    data: null,
+});
 
-const {isLoading,data} = TaskService.getTasks(fetchParams)
+const { isLoading, data } = TaskService.getTasks(fetchParams);
 
-const tableData = computed(() => { 
-    return data.value?.data??[]
- })
+const tableData = computed(() => {
+    return data.value?.data ?? [];
+});
 
-
-const openTaskModal = (data:ITask|null) => { 
-    addEditTask.value ={isOpen:true,data}
- }
-const closeTaskModal = () => { 
-    addEditTask.value ={isOpen:false,data:null}
- }
+const openTaskModal = (data: ITask | null) => {
+    addEditTask.value = { isOpen: true, data };
+};
+const closeTaskModal = () => {
+    addEditTask.value = { isOpen: false, data: null };
+};
 
 function setTask(task: ITask) {
     details.value = task;
@@ -67,20 +75,19 @@ function clearTask() {
             "
         />
 
-        <AddTaskModal :data="addEditTask.data" v-if="addEditTask.isOpen" :onClose="closeTaskModal" />
+        <AddTaskModal
+            :data="addEditTask.data"
+            v-if="addEditTask.isOpen"
+            :onClose="closeTaskModal"
+        />
 
-
-
-
-
-
-        <TaskFilters :addTask="()=>openTaskModal(null)" />
+        <TaskFilters :addTask="() => openTaskModal(null)" />
         <Table
             :isLoading="isLoading"
             :tableData="tableData"
             :headers="headers"
             :currentPage="1"
-            :totalCount="50"
+            :totalCount="tableData.length"
         >
             <template #tr="{ row }">
                 <td
@@ -121,7 +128,7 @@ function clearTask() {
                         'cursor-pointer max-w-[350px]',
                     ]"
                 >
-                    {{ formatDate((row as ITask).dueDate) }}
+                    {{ formatDate((row as ITask).due_date) }}
                 </td>
                 <td
                     :class="[
@@ -141,7 +148,7 @@ function clearTask() {
                             },
                             {
                                 name: 'Delete',
-                                onClick: () => (deleteId = (row as ITask).id),
+                                onClick: () => (deleteId = (row as ITask)._id),
                             },
                         ]"
                     />

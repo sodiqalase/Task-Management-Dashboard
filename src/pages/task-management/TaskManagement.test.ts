@@ -1,6 +1,6 @@
-import { render, fireEvent, screen } from "@testing-library/vue";
+import { render, screen } from "@testing-library/vue";
 import { describe, it, expect, vi } from "vitest";
-import { useRoute, useRouter } from "vue-router";
+
 import TaskManagementPage from "./TaskManagementPage.vue"; // Adjust the import to your file structure
 // import { TaskService } from "../../services/task.service";
 

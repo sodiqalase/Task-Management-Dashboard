@@ -4,10 +4,10 @@ import CenterModal from "../../../components/modal/CenterModal.vue";
 
 interface Props {
     onClose: () => void;
-    data: ITask|null
+    data: ITask | null;
 }
-import { ref, reactive, watch, computed } from "vue";
 
+import { ref, reactive, watch, computed } from "vue";
 
 import InputField from "../../../components/form/InputField.vue";
 import DateField from "../../../components/form/DateField.vue";
@@ -15,35 +15,38 @@ import SelectField from "../../../components/form/SelectField.vue";
 import { TaskPriorityEnum, TaskStatusEnum } from "../../../enums/task.enum";
 import TextAreaField from "../../../components/form/TextAreaField.vue";
 import { ITask } from "../../../interface/task.interface";
+import { TaskService } from "../../../services/task.service";
+import dayjs from "dayjs";
 
-const { onClose,data } = defineProps<Props>();
+const { onClose, data } = defineProps<Props>();
+
+const { isLoading, makeRequest } = TaskService.createTask();
+const { isLoading:editLoading, makeRequest:editRequest } = TaskService.editTask();
 
 const formData = reactive({
-    title: data?.title?? "",
-    description: data?.description?? "",
-    dueDate:data?.dueDate?? "",
-    status: data?.status??"",
-    priority:data?.priority??""
+    title: data?.title ?? "",
+    description: data?.description ?? "",
+    due_date: data?.due_date ?? "",
+    status: data?.status ?? "",
+    priority: data?.priority ?? "",
 });
-
 
 const formState = reactive({
     errors: {
         title: "",
         description: "",
-        dueDate: "",
+        due_date: "",
         status: "",
-        priority:""
+        priority: "",
     },
     touched: {
         title: false,
         description: false,
-        dueDate: false,
+        due_date: false,
         status: false,
-        priority:false
+        priority: false,
     },
 });
-
 
 const validateField = (field: keyof typeof formData) => {
     if (field === "title") {
@@ -54,8 +57,8 @@ const validateField = (field: keyof typeof formData) => {
         formState.errors.description = formData.description.trim()
             ? ""
             : "Description is required.";
-    } else if (field === "dueDate") {
-        formState.errors.dueDate = formData.dueDate.trim()
+    } else if (field === "due_date") {
+        formState.errors.due_date = formData.due_date.trim()
             ? ""
             : "Due date is required.";
     } else if (field === "status") {
@@ -69,19 +72,17 @@ const validateField = (field: keyof typeof formData) => {
     }
 };
 
-
 watch(
     () => formData,
     () => {
-        console.log(formData,'formData');
         Object.keys(formData).forEach((field) => {
             const fieldName = field as keyof typeof formData;
             if (formState.touched[fieldName]) {
-                validateField(fieldName); 
+                validateField(fieldName);
             }
         });
     },
-    { deep: true } 
+    { deep: true }
 );
 
 const handleBlur = (field: keyof typeof formData) => {
@@ -89,56 +90,56 @@ const handleBlur = (field: keyof typeof formData) => {
     validateField(field);
 };
 
-const isInValid = computed(() => Object.values(formData).some((val) => !val?.trim()))
-
+const isInValid = computed(() =>
+    Object.values(formData).some((val) => !val?.trim())
+);
 
 const handleSubmit = () => {
-   
-    Object.keys(formData).forEach((field) => {
-        formState.touched[field as keyof typeof formData] = true;
-        validateField(field as keyof typeof formData);
-    });
-
-   
-    const hasErrors = Object.values(formData).some((val) => !val?.trim());
-    if (!hasErrors) {
-        console.log("Form submitted:", formData);
-    } else {
-        console.log("Validation errors:", formState.errors);
+    const {due_date,...rest}= formData;
+    const payload = {
+        ...rest,
+        due_date: dayjs(formData.due_date).toISOString()
     }
+
+    if(!data){
+        makeRequest(payload).then(() => { 
+        onClose()
+     })
+    }else {
+        editRequest(payload,{},{taskId: data._id}).then(() => { 
+        onClose()
+     })
+    }
+    
+    
 };
 
+const statusOptions = ref(
+    Object.values(TaskStatusEnum).map((val) => {
+        return { key: val, label: val };
+    })
+);
+const priorityOptions = ref(
+    Object.values(TaskPriorityEnum).map((val) => {
+        return { key: val, label: val };
+    })
+);
 
-const statusOptions = ref(Object.values(TaskStatusEnum).map((val) => { 
-    return {key:val,label:val}
- }));
-const priorityOptions = ref(Object.values(TaskPriorityEnum).map((val) => { 
-    return {key:val,label:val}
- }));
-
-
-const onSubmit = (values: any) => {
-    console.log("Form submitted with:", values);
-};
-
-
+// const onSubmit = (values: TaskPayload) => {
+//     makeRequest(values)
+// };
 </script>
 
 <template>
     <CenterModal :onClose="onClose">
-        <form
-                 @submit.prevent="handleSubmit"
-        className="sm:w-[500px] w-full">
+        <form @submit.prevent="handleSubmit" className="sm:w-[500px] w-full">
             <div className="py-5">
                 <h6
                     className="font-semibold text-centertext-[24px] text-center text-dbGray"
                 >
-                    {{data?'Edit':'Add'}} Task
+                    {{ data ? "Edit" : "Add" }} Task
                 </h6>
-                <div
-                    class="flex flex-col gap-y-4 mt-3"
-           
-                >
+                <div class="flex flex-col gap-y-4 mt-3">
                     <InputField
                         id="title"
                         label="Title"
@@ -166,16 +167,16 @@ const onSubmit = (values: any) => {
                     />
 
                     <DateField
-                        id="dueDate"
+                        id="due_date"
                         label="Due Date"
-                        v-model="formData.dueDate"
+                        v-model="formData.due_date"
                         :error="
-                            formState.touched.dueDate
-                                ? formState.errors.dueDate
+                            formState.touched.due_date
+                                ? formState.errors.due_date
                                 : ''
                         "
                         placeholder="Enter Date"
-                        :onBlur="() => handleBlur('dueDate')"
+                        :onBlur="() => handleBlur('due_date')"
                     />
 
                     <SelectField
@@ -204,26 +205,23 @@ const onSubmit = (values: any) => {
                         placeholder="Choose priority"
                         :onBlur="() => handleBlur('priority')"
                     />
-
-                    
                 </div>
             </div>
 
-            <div
-                className="grid grid-cols-2 gap-x-4 mt-2"
-            >
+            <div className="grid grid-cols-2 gap-x-4 mt-2">
                 <Button
                     :buttonText="'Cancel'"
                     variant="secondary"
-                    :onClick="() => {}"
+                    :onClick="onClose"
                 />
                 <Button
-                :disabled="isInValid"
-                type="submit"
-                :buttonText="'Submit'" :onClick="() => {}" />
+                    :disabled="isInValid || isLoading|| editLoading"
+                    :loading="isLoading||editLoading"
+                    type="submit"
+                    :buttonText="'Submit'"
+                    :onClick="() => {}"
+                />
             </div>
         </form>
     </CenterModal>
 </template>
-
-

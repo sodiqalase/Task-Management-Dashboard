@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { TaskService } from "../../services/task.service";
 import Button from "../Button.vue";
 import CenterModal from "./CenterModal.vue";
 
@@ -6,10 +7,18 @@ import CenterModal from "./CenterModal.vue";
 
 interface Props {
     onClose: () => void;
-    id:number|null
+    id:string|null
 }
 
+const {isLoading,makeRequest}= TaskService.deleteTask()
+
 const { onClose,id } = defineProps<Props>();
+
+const deleteTask = () => { 
+    makeRequest({},{},{taskId:id}).then(() =>{
+        onClose();
+    })
+ }
 </script>
 
 <template>
@@ -28,12 +37,15 @@ const { onClose,id } = defineProps<Props>();
                     <Button
                     :buttonText="'Cancel'"
                     variant="secondary"
-                    :onClick="()=>{}"
+                    :disabled="isLoading"
+                    :onClick="onClose"
                     />
                     <Button
                     :style="'!bg-red-500'"
+                    :disabled="isLoading"
+                    :loading="isLoading"
                     :buttonText="'Proceed'"
-                    :onClick="()=>{}"
+                    :onClick="deleteTask"
                     />
                 </div>
             </section>

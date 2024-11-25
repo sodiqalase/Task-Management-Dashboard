@@ -1,4 +1,4 @@
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 // Define a type for the query parameters
@@ -53,3 +53,27 @@ export const useURLQuery = (effectFn?: (data: URLQuery) => void) => {
         setURLQuery,
     };
 };
+
+export function useUrlState<T = string>(
+    key: string,
+    deflt: string = "",
+    transform: (arg: string) => T = (x) => x as T
+) {
+    const route = useRoute();
+    const router = useRouter();
+
+    return computed({
+        get() {
+            const queryValue = route.query[key];
+            const value = Array.isArray(queryValue)
+                ? queryValue[0]
+                : queryValue;
+            return transform(value ?? deflt);
+        },
+        set(value: string) {
+            router.replace({
+                query: { ...router.currentRoute.value.query, [key]: value },
+            });
+        },
+    });
+}
