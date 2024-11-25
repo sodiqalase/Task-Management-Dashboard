@@ -29,42 +29,31 @@
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/RoppiDev/roppi-shop.git
-    ```
-
-2. Create a new branch:
-
-    ```bash
-    git checkout -b feature/[branch-name]
+    git clone https://github.com/sodiqalase/Task-Management-Dashboard.git
     ```
 
     > **Note**: Please use only **Yarn** as the package manager.
 
-3. Install dependencies:
+2. Install dependencies:
 
     ```bash
     yarn
     ```
+ ```
 
-4. Prepare husky:
-
-    ```bash
-    yarn run postinstall
-    ```
-
-5. Run the development server:
+3. Run the development server:
 
     ```bash
     yarn run dev
     ```
 
-5. Run tests:
+4. Run tests:
 
     ```bash
     npx vitest
     ```
 
-6. For production build:
+5. For production build:
 
     ```bash
     yarn run build
