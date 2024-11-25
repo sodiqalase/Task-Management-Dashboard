@@ -1,30 +1,35 @@
 # Task Management Dashboard
 
+A simple task management dashboard built with Vue 3, TypeScript, and SCSS.
+
+---
 
 ## Code Structure
 
-- **router/**: Handles all routing for the application, for page components.
-  
-- **components/**: Contains reusable components used across the application. Any code that is used more than once should be placed here.
-  
-- **composables/**: Stores all composables hooks.
-  
-- **interfaces/**: All TypeScript types and interfaces are housed in this folder.
-  
-- **enums/**: Contains all enumerations used in the project.
-  
-- **layout/**: Holds layout-related components like `Navbar`, `Footer`, `Sidebar`, and `DashbaoardLayout`.
-  
-- **services/**: Contains all API service calls.
-  
-- **styles/**: Includes SCSS styles. You can add new styles to the global SCSS file or create dedicated partials as needed.
-  
-- **utils/**: Contains reusable utility functions and code logic.
-  
-- **pages/**: Holds page components, organized by functionality. For example, `Auth/LoginPage`, `Auth/SignupPage`, `Homepage/*`, `LandingPage/`.
-  
+- **router/**: Handles all routing for the application, including page-level components.
+- **components/**: Contains reusable components shared across the application.
+- **composables/**: Houses reusable Vue composition functions.
+- **interfaces/**: Stores all TypeScript types and interfaces for the application.
+- **enums/**: Contains enumerations used throughout the project.
+- **layout/**: Holds layout-related components like `Navbar`, `Footer`, `Sidebar`, and `DashboardLayout`.
+- **services/**: Includes all API service call logic.
+- **styles/**: Contains global SCSS files and partials for application styling.
+- **utils/**: Holds reusable utility functions and shared logic.
+- **pages/**: Contains page components organized by functionality, such as:
+  - `Auth/LoginPage`
+  - `Auth/SignupPage`
+  - `Homepage/*`
+  - `LandingPage/*`
+
+---
 
 ## Setup Instructions
+
+### Prerequisites
+- Node.js `^16.0.0`
+- Yarn `^1.22.0`
+
+### Installation
 
 1. Clone the repository:
 
@@ -32,33 +37,29 @@
     git clone https://github.com/sodiqalase/Task-Management-Dashboard.git
     ```
 
-    > **Note**: Please use only **Yarn** as the package manager.
+2. Navigate to the project directory:
 
-2. Install dependencies:
+    ```bash
+    cd [project-directory]
+    ```
+
+3. Install dependencies:
 
     ```bash
     yarn
     ```
- ```
 
-3. Run the development server:
-
-    ```bash
-    yarn run dev
-    ```
-
-4. Run tests:
+4. Run the development server:
 
     ```bash
-    npx vitest
+    yarn dev
     ```
 
-5. For production build:
+5. Open [http://localhost:5173](http://localhost:5173) in your browser to view the application.
 
-    ```bash
-    yarn run build
-    ```
+### Testing
 
-Once the server is running, open [http://localhost:5173](http://localhost:5173) in your browser to view the application.
+Run tests using Vitest:
 
----
+```bash
+npx vitest
