@@ -16,7 +16,7 @@ const routes = [
                 component: Overview,
             },
             {
-                path: "task",
+                path: "task-management",
                 name: "Users",
                 component: Task,
             },

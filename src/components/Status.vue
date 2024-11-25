@@ -9,7 +9,7 @@ const { status } = defineProps<Props>();
 
 const statusMap: Record<TaskStatus, string> = {
     Pending: "bg-yellow-100 text-yellow-500",
-    "In Progress": "bg-blue-100 text-blue-500",
+    "In_Progress": "bg-blue-100 text-blue-500",
     Completed: "bg-green-100 text-green-500",
 };
 </script>
@@ -21,7 +21,7 @@ const statusMap: Record<TaskStatus, string> = {
             statusMap[status],
         ]"
     >
-        {{ status }}
+        {{ status?.replace("_"," ") }}
     </span>
 </template>
 

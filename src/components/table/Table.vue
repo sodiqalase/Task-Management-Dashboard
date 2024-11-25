@@ -15,7 +15,7 @@ interface TableProps {
 
 // Props
 const {
-    tableHeight = "sm:h-[80vh] h-[100vh]",
+    tableHeight = "sm:h-[75vh] h-[100vh]",
     isLoading,
     tableData,
     currentPage,
@@ -99,7 +99,7 @@ const {
             </div>
         </div>
 
-        <div class="flex justify-end pr-5">
+        <div class="flex justify-end pt-3 pr-5">
             <TablePagination
                 :currentPage="currentPage"
                 :totalCount="totalCount"

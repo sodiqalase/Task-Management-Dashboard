@@ -8,13 +8,14 @@ interface Props {
     placeholder?: string;
     error?: string;
     onBlur?: () => void;
+    rows?:number
 }
 
-const props = defineProps<Props>();
+const {modelValue,rows=3} = defineProps<Props>();
 const emit = defineEmits(["update:modelValue"]);
 const value = computed({
     get() {
-        return props.modelValue;
+        return modelValue;
     },
     set(value) {
         emit("update:modelValue", value);
@@ -30,13 +31,14 @@ const value = computed({
             :for="id"
             >{{ label }}</label
         >
-        <input
+        <textarea
             :id="id"
             type="text"
             :placeholder="placeholder"
             @blur="onBlur" 
+            :rows="rows"
             v-model="value"
-            class="block w-full rounded-[12px] border border-slate-300 px-4 outline-none text-sm h-[50px]"
+            class="block w-full rounded-[12px] border border-slate-300 px-4 py-1 outline-none text-sm min-h-[50px]"
         />
         <p class="text-xs mt-[2px] text-red-500" v-if="!!error" >{{ error }}</p>
     </div>

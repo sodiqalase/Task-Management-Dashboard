@@ -24,7 +24,7 @@ const { onClose,id } = defineProps<Props>();
                     </p>
                 </div>
 
-                <div className="border-t border-lightGray grid grid-cols-2 gap-x-4 p-5">
+                <div className="border-t border-lightGray grid grid-cols-2 gap-x-4 py-5">
                     <Button
                     :buttonText="'Cancel'"
                     variant="secondary"

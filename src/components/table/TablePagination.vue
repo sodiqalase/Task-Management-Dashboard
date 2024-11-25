@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
+import { useURLQuery } from "../../composables/useURLQuery";
 
 interface Props {
     currentPage: number
     totalCount: number
 }
 
+const {setURLQuery}=useURLQuery()
 
 const { currentPage: propCurrentPage, totalCount } = defineProps<Props>();
 
@@ -15,6 +17,10 @@ watch(() => propCurrentPage, (newValue) => {
   currentPage.value = newValue;
 });
 
+const updatePageQuery = (val:number) => { 
+  setURLQuery({page: val?.toString()??"1"})
+ }
+
 </script>
 
 
@@ -23,8 +29,10 @@ watch(() => propCurrentPage, (newValue) => {
       <vue-awesome-paginate
         :total-items="totalCount"
         v-model="currentPage"
-        :items-per-page="2"
-        :max-pages-shown="2"
+        :items-per-page="10"
+        :max-pages-shown="10"
+        @click="updatePageQuery"
+        
       >
         <template #prev-button>
     

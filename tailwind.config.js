@@ -5,7 +5,6 @@ module.exports = {
         extend: {
             colors: {
                 appBg: "#F1F5FF",
-                gold: "#A0830B",
                 blueGray: "#617091",
                 inputGray: "#667085",
                 gray2: "#A3ABBC",

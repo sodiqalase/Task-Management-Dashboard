@@ -15,7 +15,7 @@ import SidebarItem from "./SidebarItem.vue";
                     :icon="'overview'"
                 />
                 <SidebarItem
-                    :path="'/dashboard/task'"
+                    :path="'/dashboard/task-management'"
                     :label="'Task Management'"
                     :icon="'task'"
                 />
