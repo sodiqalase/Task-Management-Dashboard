@@ -3,10 +3,12 @@ export const toTitleCase = (str: string): string => {
 };
 
 export const extractPageTitle = (value: string) => {
-    return value
-        .split("/")[2]
-        .replace("-", " ")
-        .split(" ")
-        .map((val) => toTitleCase(val))
-        .join(" ");
+    return (
+        value
+            ?.split("/")?.[2]
+            ?.replace(/-/g, " ")
+            ?.split(" ")
+            ?.map((val) => toTitleCase(val))
+            ?.join(" ") ?? ""
+    );
 };

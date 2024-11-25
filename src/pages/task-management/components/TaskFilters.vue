@@ -6,12 +6,10 @@ import { TaskPriorityEnum, TaskStatusEnum } from "../../../enums/task.enum";
 import Button from "../../../components/Button.vue";
 
 interface Props {
-    addTask: ()=>void
-
+    addTask: () => void;
 }
 
-
-const { addTask} = defineProps<Props>();
+const { addTask } = defineProps<Props>();
 
 const { value, setURLQuery } = useURLQuery();
 
@@ -26,52 +24,49 @@ const priorityOptions = ref(
     })
 );
 const sortByOptions = ref(
-    ['Ascending',"Descending"].map((val) => {
+    ["Ascending", "Descending"].map((val) => {
         return { key: val, label: val };
     })
 );
+
+const clearFilter = () => { 
+    setURLQuery({
+        status:null,
+        priority:null,
+        sortBy:null
+    })
+ }
 </script>
 
 <template>
     <div class="flex mb-5 sm:justify-end">
-        <div class="grid w-full grid-cols-2 sm:grid-cols-4 gap-4">
-            
-                <SelectField
-                    name="status"
-                    :options="statusOptions"
-                    v-model="value.status"
-                    :onChange="(val)=> setURLQuery({status: val as string})"
-                    placeholder="Select status"
-                />
-               
-           
-            
-                <SelectField
-                    name="priority"
-                    :options="priorityOptions"
-                    v-model="value.priority"
-                    :onChange="(val)=> setURLQuery({priority: val as string})"
-                    placeholder="Select priority"
-                />
-               
-            
-           
-                <SelectField
-                    name="sortBy"
-                    :options="sortByOptions"
-                    v-model="value.sortBy"
-                    :onChange="(val)=> setURLQuery({sortBy: val as string})"
-                    placeholder="Sort By"
-                />
-               
-           
-           
-                <Button
-                    :buttonText="'Add Task'"
-                  
-                    :onClick="addTask"
-                />
-           
+        <div class="grid w-full grid-cols-2 sm:grid-cols-5 gap-4">
+            <SelectField
+                name="status"
+                :options="statusOptions"
+                v-model="value.status as string"
+                :onChange="(val) => setURLQuery({ status: val as string })"
+                placeholder="Select status"
+            />
+
+            <SelectField
+                name="priority"
+                :options="priorityOptions"
+                v-model="value.priority as string"
+                :onChange="(val) => setURLQuery({ priority: val as string })"
+                placeholder="Select priority"
+            />
+
+            <SelectField
+                name="sortBy"
+                :options="sortByOptions"
+                v-model="value.sortBy as string"
+                :onChange="(val) => setURLQuery({ sortBy: val as string })"
+                placeholder="Sort By"
+            />
+
+            <Button :buttonText="'Add Task'" :onClick="addTask" />
+            <Button :buttonText="'Reset Filter'" variant="secondary" :onClick="clearFilter" />
         </div>
     </div>
 </template>

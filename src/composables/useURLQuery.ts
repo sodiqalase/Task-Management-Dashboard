@@ -2,7 +2,7 @@ import { ref, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 // Define a type for the query parameters
-type URLQuery = Record<string, string>;
+type URLQuery = Record<string, string | null | undefined>;
 
 // Function to parse query parameters from the URL
 export const useURLQuery = (effectFn?: (data: URLQuery) => void) => {

@@ -15,7 +15,7 @@ interface TableProps {
 
 // Props
 const {
-    tableHeight = "sm:h-[75vh] h-[100vh]",
+    tableHeight = "sm:h-[75vh] h-[80vh]",
     isLoading,
     tableData,
     currentPage,
@@ -89,7 +89,7 @@ const {
                         <tr v-else-if="!isLoading && tableData.length === 0">
                             <td
                                 :colspan="headers.length + 1"
-                                class="text-center py-5"
+                                class="text-center font-medium pt-12"
                             >
                                 No data available.
                             </td>
