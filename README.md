@@ -11,15 +11,14 @@ A simple task management dashboard built with Vue 3, TypeScript, and SCSS.
 - **composables/**: Houses reusable Vue composition functions.
 - **interfaces/**: Stores all TypeScript types and interfaces for the application.
 - **enums/**: Contains enumerations used throughout the project.
-- **layout/**: Holds layout-related components like `Navbar`, `Footer`, `Sidebar`, and `DashboardLayout`.
+- **layout/**: Holds layout-related components like `Navbar`, `Sidebar`, and `DashboardLayout`.
 - **services/**: Includes all API service call logic.
 - **styles/**: Contains global SCSS files and partials for application styling.
 - **utils/**: Holds reusable utility functions and shared logic.
 - **pages/**: Contains page components organized by functionality, such as:
-  - `Auth/LoginPage`
-  - `Auth/SignupPage`
-  - `Homepage/*`
-  - `LandingPage/*`
+  - `Overview`
+  - `Task Management`
+ 
 
 ---
 
